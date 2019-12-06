@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weather</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Don't forget to link to jQuery -->
+<style>
+	input{
+		margin: 10px 0px;
+		padding: 5px;
+	}
+	#forecast{
+		/*This div should not appear until the weather is returned.*/
+	}
+	#forecast div{
+		width: 25vw;
+		border: 8px solid blue;
+		margin: 0 auto;
+		background: black;
+	}
+	img{
+		width:100%;
+	}
+</style>
+<script>
+
+    $(document).ready(function(){
+        $( "#forecast" ).hide();
+    })
+
+
+
+    $("input[value='imperial']").click(function(){
+        console.log('heeeeelo');
+        // let query1 = "https://api.openweathermap.org/data/2.5/weather?q="+city+'&units='+celcius+"&APPID=f6ea3e2242acc41d1a65ca65f9307c85"
+    })
+    $('input[type=radio][name=temp]').change(function() {
+        console.log('lol');
+    })
+
+    function gettingJSON(){
+
+        var city = $('#location').val().replace(" ", "+");
+        if (city == '') {
+            city = 'Ann Arbor';
+        }
+        console.log(city);
+
+        var unit = 'imperial';
+        var temp = $("input[name=temp]:checked").val();
+
+        console.log(temp);
+        if (temp==undefined|temp=='imperial'){
+            console.log("heleeeelo");
+            unit = 'imperial';
+        }else{
+            unit = 'metric';
+        }
+
+
+        console.log(city,unit);
+
+            let query = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&units="+unit+"&APPID=f6ea3e2242acc41d1a65ca65f9307c85";
+            $.getJSON(query,function(json){
+                 JSON.stringify(json);
+                 console.log(json)
+                 var icon = json['weather'][0]['icon'];
+                 var city = json['name'];
+                 var temp_min = json['main']['temp_min']
+                 var temp_max = json['main']['temp_max']
+                 var temp_curr = json['main']['temp']
+                 console.log(temp_curr,temp_min,temp_max,city,icon);
+                 $('#tempImg').attr('src', 'https://openweathermap.org/img/w/' + icon + ".png");
+                 $('#loc').html(city);
+                 $('#temp').html(temp_curr);
+                 $('#high').html(temp_max);
+                 $('#low').html(temp_min);
+            })
+
+
+
+        $( "#forecast" ).show();
+        // if #type=radio not clicked
+            //default
+
+
+        //if farenheit is clicked
+        //     let queryFarenheit = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&units=imperial&APPID=f6ea3e2242acc41d1a65ca65f9307c85";
+        //     $.getJSON(queryFarenheit,function(json){
+        //          JSON.stringify(json);
+        //          console.log(json)
+        //          var icon = json['weather'][0]['icon'];
+        //          var city = json['name'];
+        //          var temp_min = json['main']['temp_min']
+        //          var temp_max = json['main']['temp_max']
+        //          var temp_curr = json['main']['temp']
+        //     })
+        // //if celcius is clicked
+        //     let queryCelcius = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&units=metric&APPID=f6ea3e2242acc41d1a65ca65f9307c85";
+        //     $.getJSON(queryCelcius,function(json){
+        //          JSON.stringify(json);
+        //          console.log(json)
+        //          var icon = json['weather'][0]['icon'];
+        //          var city = json['name'];
+        //          var temp_min = json['main']['temp_min']
+        //          var temp_max = json['main']['temp_max']
+        //          var temp_curr = json['main']['temp']
+        //     })
+
+        //change the html
+         // $('#tempImg').attr('src', 'https://openweathermap.org/img/w/' + icon + ".png");
+         // $('#loc').html('Ann Arbor');
+         // $('#temp').html(temp_curr);
+         // $('#high').html(temp_max);
+         // $('#low').html(temp_min);
+
+
+
+
+
+        console.log("Hi");
+    	// Use the OpenWeather API to return:
+    	//  the current temperature
+    	//  the high temperature for the day
+    	//  the low temperature for the day
+    	//  the icon for the current weather.
+
+        // var city = 'Ann+Arbor';
+        // $("#loc") = city;
+        // console.log(('Ann Arbor'));
+
+        // var city = $('#loc').val('Ann Arbor');
+
+        // var city = city.val();
+  //       $('#loc').html('Ann Arbor');
+  //       var fahrenheit = $('#fahrenheit').val();
+  //       var city = $('#location').val();
+  //       var city = city.replace(" ", "+");
+  //       var celcius = $('#celcius').val();
+  //       var fahrenheit = $('#fahrenheit').val();
+
+  //   	// You will need to update this query with the city, weather format (Celsius or Fahrenheit) and your OpenWeatherMap ID
+
+  //   	// Right now I have it set to Chicago.  The default should be Ann Abor/Fahreheit.
+		// let query = "https://api.openweathermap.org/data/2.5/weather?q=Ann+Arbor&APPID=" +'f6ea3e2242acc41d1a65ca65f9307c85';
+
+
+
+        // "https://samples.openweathermap.org/data/2.5/find?q=London&units=metric&appid=b6907d289e10d714a6e88b30761fae22"
+
+    }
+    </script>
+</head>
+<body>
+	<!-- DO NOT CHANGE ANY CODE IN THE BODY OF THIS FILE. -->
+	<label for ="location">City:</label><input type = "text" id = "location"><br>
+	<input type = "radio" name = "temp" value = "imperial" id = "fahrenheit"> <label for = "fahrenheit">Fahrenheit</label><br>
+	<input type = "radio" name = "temp" value = "metric" id = "celcius"> <label for = "celcius">Celcius</label><br>
+
+	<button id = "getIt" onclick = " gettingJSON()">Get Weather</button>
+
+
+	<div id = "forecast">
+		<div>
+		<img id = "tempImg" src="" alt = "" title = "">
+		</div>
+		<p>The temperature in <span id = "loc"></span> is currently <span id = "temp"></span>.</p>
+		<p>The high today will be <span id = "high"></span> and the low will be <span id = "low"></span>.</p>
+
+	</div>
+</body>
+</html>
